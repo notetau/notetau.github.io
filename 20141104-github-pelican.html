@@ -190,11 +190,11 @@ Pelicanではデフォルトのポートは8000なので
 <p>publishconf.pyの方はGithub Pagesにアップする人はあまり気にしなくて良い模様です。</p>
 <h2>Github Pagesに公開</h2>
 <p>前回もやりましたがユーザー名.github.ioというリポジトリを作って、そのmasterブランチにpelicanで生成したoutputディレクトリのファイル群を流せば完了です。</p>
-<p>TODO 実際にやってみると？</p>
-<div class="highlight"><pre><span class="nv">$ </span>git init
-<span class="nv">$ </span>git add --all
-<span class="nv">$ </span>git commit -m <span class="s2">&quot;message&quot;</span>
-<span class="nv">$ </span>git push 
+<p>Github PagesのUserPageに載せるだけであればoutputディレクトリをgitで管理すれば大丈夫です。ただし、設定ファイルやMarkdownファイルなどは別にバックアップをとっておいたほうがいいでしょう。</p>
+<div class="highlight"><pre>output<span class="nv">$ </span>git init
+output<span class="nv">$ </span>git add --all
+output<span class="nv">$ </span>git commit -m <span class="s2">&quot;message&quot;</span>
+output<span class="nv">$ </span>git push https://github.com/ユーザー名/ユーザー名.github.io.git master:master
 </pre></div>
 
 
@@ -224,10 +224,10 @@ Pelicanではデフォルトのポートは8000なので
 
 <h4>Tags</h4>
 	<ul>
-	    <li class="tag-4"><a href="/tag/python.html">python</a></li>
+	    <li class="tag-4"><a href="/tag/misc.html">misc</a></li>
 	    <li class="tag-4"><a href="/tag/octopress.html">octopress</a></li>
 	    <li class="tag-4"><a href="/tag/pelican.html">pelican</a></li>
-	    <li class="tag-4"><a href="/tag/misc.html">misc</a></li>
+	    <li class="tag-4"><a href="/tag/python.html">python</a></li>
 	    <li class="tag-4"><a href="/tag/ruby.html">ruby</a></li>
 </ul>
 
