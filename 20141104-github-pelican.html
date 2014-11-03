@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+        <title>githubでブログを作ってみる - Pelican編</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/pygment.css" />
+
+        <script src="/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="/">Memo In Notebook <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="/20141104-github-pelican.html" rel="bookmark"
+                   title="Permalink to githubでブログを作ってみる - Pelican編">githubでブログを作ってみる - Pelican編</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2014-11-04T01:00:00+01:00">
+                2014-11-04
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="/author/notetau.html"> notetau</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <p>前回はGithub Pagesでブログを作るために静的サイトジェネレータoctopressをローカルで表示できるところまでやりました。が、いまいちしっくりこないということでいろいろ探したところPelicanなるものを見つけました。Pelicanも静的サイトジェネレータであり、Pythonで書かれれいるのでPythonスキーにもうれしい。ということで今回はきちんとGithub Pagesでいまご覧になってるページを表示するまでを紹介します。</p>
+<h1>Pelicanの導入</h1>
+<p>環境は次のとおりです。</p>
+<ul>
+<li>debian wheezy</li>
+<li>python 3.4.2</li>
+<li>pelican 3.4.0</li>
+</ul>
+<h2>python3.4の導入</h2>
+<p>Python3系で使おうとしたのですが
+自分の環境ではPython3系として3.2が入っていて、
+<a href="http://docs.getpelican.com/en/3.4.0/quickstart.html">公式 quickstart</a>
+を見るに3.3以上を求めてるので私は現時点の最新版をいれることにしました。</p>
+<p>インストールは</p>
+<div class="highlight"><pre><span class="nv">$ </span>./configure
+<span class="nv">$ </span>make
+<span class="nv">$ </span>sudo make altinstall
+</pre></div>
+
+
+<p>altinstallはpython3とタイプしたときは既存のバージョン、python3.*としたときはそのバージョンが起動するようにするためのものです。そうなっているか確認しましょう。</p>
+<div class="highlight"><pre><span class="nv">$ </span>python --version
+Python 2.7.3
+<span class="nv">$ </span>python3 --version
+Python 3.2.3
+<span class="nv">$ </span>python3.2 --version
+Python 3.2.3
+<span class="nv">$ </span>python3.4 --version
+Python 3.4.2
+</pre></div>
+
+
+<p>問題ないようです。</p>
+<h2>仮想環境の作成</h2>
+<p>この調子で仮想環境も作ってしまいましょう。</p>
+<div class="highlight"><pre><span class="nv">$ </span>virtualenv -p python3.4 --no-site-packages blog
+<span class="nv">$ </span><span class="nb">cd </span>blog
+<span class="nv">$ </span><span class="nb">source </span>bin/activate
+<span class="nv">$ </span>python --version
+Python 3.4.2
+</pre></div>
+
+
+<h2>Pelicanのインストール</h2>
+<p>せっかく？仮想環境を作ったので安心して最新版を使っていこうと思います。</p>
+<div class="highlight"><pre><span class="nv">$ </span>git clone https://github.com/getpelican/pelican.git
+<span class="nv">$ </span><span class="nb">cd </span>pelican
+<span class="nv">$ </span>python setup.py install
+</pre></div>
+
+
+<h2>基本設定</h2>
+<div class="highlight"><pre><span class="nv">$ </span>mkdir myblog
+<span class="nv">$ </span><span class="nb">cd </span>myblog
+<span class="nv">$ </span>pelican-quickstart 
+</pre></div>
+
+
+<p>いろいろ聞かれるので適当に答えていきます。よく分からないところは後から変更もできるのであまり気にせずに。</p>
+<h2>記事作成</h2>
+<p>記事はcontentディレクトリ内に書いていきます。</p>
+<p>今回はMarkdown形式で書くので更にpipからMarkdownを入れておきます。</p>
+<div class="highlight"><pre><span class="nv">$ </span>pip install Markdown
+</pre></div>
+
+
+<p>他にもreStructuredText形式も使えます（というかこちらを使うのがPythonicでしょう）。</p>
+<p>ファイルの先頭に記事の情報をこんな感じで書いていけば完成です。</p>
+<pre>
+Title: githubでブログを作ってみる - Pelican編
+Date: 2014-11-04 01:00:00
+Category: tool
+Tags: python, pelican
+Author: notetau
+Slug: 20141104-github-pelican
+Summary: 概要...
+
+本文...
+</pre>
+
+<p>ちなみにSlugというのはURLのページ名になります。
+後は</p>
+<div class="highlight"><pre>myblog$ make html
+</pre></div>
+
+
+<p>とすればHTMLが出力されます。</p>
+<h2>プレビュー</h2>
+<p>後は</p>
+<div class="highlight"><pre>myblog<span class="nv">$ </span>make serve
+</pre></div>
+
+
+<p>すればローカルで表示できるようになりました。今回はすんなりと行きました、よかった。
+Pelicanではデフォルトのポートは8000なので
+<a href="http://localhost:8000/">http://localhost:8000/</a>
+をみて見ましょう。
+ちなみに書きながら表示をチェックする時には</p>
+<div class="highlight"><pre>mablog<span class="nv">$ </span>make devserver
+</pre></div>
+
+
+<p>とすると、変更を検知するたびにhtmlを作ってくれながら、Webサーバも立ち上がります。</p>
+<h2>各種設定</h2>
+<p>Pelicanの設定ファイルはpelicanconf.pyとpublishconf.pyになってます。</p>
+<p>pelicanconf.pyの中で各種変数を定義しておけば、うまいことやってくれる感じ
+です。どんな変数があるかは
+<a href="http://docs.getpelican.com/en/3.4.0/settings.html">公式</a>
+で確認するといいでしょう。
+変数の中でおそらく大事なのはこのあたりでしょうか。</p>
+<div class="highlight"><pre><span class="n">AUTHOR</span> <span class="o">=</span> <span class="s">&#39;notetau&#39;</span> <span class="c">#筆者</span>
+<span class="n">SITENAME</span> <span class="o">=</span> <span class="s">&#39;Memo In Notebook&#39;</span> <span class="c">#サイト名</span>
+<span class="n">DEFAULT_LANG</span> <span class="o">=</span> <span class="s">&#39;ja&#39;</span> <span class="c">#使用言語</span>
+<span class="n">DATE_FORMATS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;en&#39;</span><span class="p">:</span> <span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s">&#39;</span><span class="p">,</span>
+    <span class="s">&#39;ja&#39;</span><span class="p">:</span> <span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s">&#39;</span><span class="p">,</span>
+<span class="p">}</span> <span class="c"># 日付フォーマット　これが無いと日本人から見ると変なあのフォーマットになるので設定したほうが無難かと</span>
+<span class="n">THEME</span> <span class="o">=</span> <span class="s">&#39;テーマへのパス&#39;</span>
+</pre></div>
+
+
+<p>後はLINKやSOCIALを適当書いていけばいいと思います。
+テーマは
+<a href="https://github.com/getpelican/pelican-themes">https://github.com/getpelican/pelican-themes</a>
+あたりから拾ってきて、THEME変数に使いたいテーマのパスを設定すればおｋです。</p>
+<p>publishconf.pyの方はGithub Pagesにアップする人はあまり気にしなくて良い模様です。</p>
+<h2>Github Pagesに公開</h2>
+<p>前回もやりましたがユーザー名.github.ioというリポジトリを作って、そのmasterブランチにpelicanで生成したoutputディレクトリのファイル群を流せば完了です。</p>
+<p>TODO 実際にやってみると？</p>
+<h3>参考ページ</h3>
+<ul>
+<li><a href="http://blog.tekito.org/2013/12/16/setting-up-a-blog-with-pelican/">静的サイトジェネレータ Pelican で Blog を書こう</a></li>
+<li><a href="http://blog.sotm.jp/2014/01/04/Pelican-Markdown-GithubPages-install-guide/">Pelican + Markdown + GitHub Pagesで管理するブログの作り方</a></li>
+</ul>
+            </div><!-- /.entry-content -->
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+  </ul>
+
+<h4>Categories</h4>
+<ul>
+		<li><a href="/category/misc.html">misc</a></li>
+		<li><a href="/category/tool.html">tool</a></li>
+</ul>
+
+
+<h4>Tags</h4>
+	<ul>
+	    <li class="tag-4"><a href="/tag/pelican.html">pelican</a></li>
+	    <li class="tag-4"><a href="/tag/python.html">python</a></li>
+	    <li class="tag-4"><a href="/tag/ruby.html">ruby</a></li>
+	    <li class="tag-4"><a href="/tag/octopress.html">octopress</a></li>
+	    <li class="tag-4"><a href="/tag/misc.html">misc</a></li>
+</ul>
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="/theme/js/libs/gumby.min.js"></script>
+  <script src="/theme/js/plugins.js"></script>
+</body>
+</html>

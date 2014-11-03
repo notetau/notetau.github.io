@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+        <title>githubでブログを作ってみる - octopress編</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/pygment.css" />
+
+        <script src="/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="/">Memo In Notebook <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="/20141103-github-octopress.html" rel="bookmark"
+                   title="Permalink to githubでブログを作ってみる - octopress編">githubでブログを作ってみる - octopress編</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2014-11-03T01:00:00+01:00">
+                2014-11-03
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="/author/notetau.html"> notetau</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <p>githubでブログをはじめるにはGithub Pagesというのを使います。ユーザー名.github.ioというリポジトリを作っておくと
+http://ユーザー名.github.ioで見られるというものです。しかしこれは静的なページしか表示できません。</p>
+<p>そこで静的サイトジェネレータと呼ばれるツールを使います。
+これでできた生成物をアップすればちゃんとしたブログなどが作れてしまうのです。Github Pagesなら生成物をリポジトリに流しこめばおｋということです。</p>
+<p>今回は静的サイトジェネレータでも最も有名?なoctopressを使って見ました。
+結局は別のツールを使うことにしたのですが、せっかく導入まではやったので、何番煎じかわかりませんが、そのメモを残しておこうと思います。</p>
+<h1>octopressの導入</h1>
+<p>環境</p>
+<ul>
+<li>debian wheezy</li>
+<li>ruby 1.9.3p194</li>
+</ul>
+<p>まずはoctopressをgitしてきましょう。適当なディレクトリに移動して</p>
+<div class="highlight"><pre>git clone https://github.com/imathis/octopress
+<span class="nb">cd </span>octopress/
+</pre></div>
+
+
+<p>でrubyわからない勢は言われたまま</p>
+<div class="highlight"><pre>gem install bundler
+bundle install
+</pre></div>
+
+
+<p>gemっていうのはpipと同じ認識でよいのでしょうか？そうすると</p>
+<div class="highlight"><pre>（省略）
+An error occurred while installing RedCloth (4.2.9), and Bundler cannot
+continue.
+Make sure that `gem install RedCloth -v &#39;4.2.9&#39;` succeeds before bundling.
+</pre></div>
+
+
+<p>怒られたので言われるままに</p>
+<div class="highlight"><pre>gem install RedCloth -v <span class="s1">&#39;4.2.9&#39;</span>
+</pre></div>
+
+
+<p>また怒られた</p>
+<div class="highlight"><pre><span class="nx">Building</span> <span class="nx">native</span> <span class="nx">extensions.</span>  <span class="nx">This</span> <span class="nx">could</span> <span class="k">take</span> <span class="nx">a</span> <span class="k">while</span><span class="nx">...</span>
+<span class="nx">ERROR</span><span class="p">:</span>  <span class="nx">Error</span> <span class="nx">installing</span> <span class="nx">RedCloth</span><span class="p">:</span>
+    <span class="nx">ERROR</span><span class="p">:</span> <span class="nx">Failed</span> <span class="k">to</span> <span class="nx">build</span> <span class="nx">gem</span> <span class="nx">native</span> <span class="nx">extension.</span>
+
+        <span class="p">/</span><span class="nx">usr</span><span class="p">/</span><span class="nx">bin</span><span class="p">/</span><span class="nx">ruby1.9.1</span> <span class="nx">extconf.rb</span>
+<span class="p">/</span><span class="nx">usr</span><span class="p">/</span><span class="nx">lib</span><span class="p">/</span><span class="nx">ruby</span><span class="p">/</span><span class="nx">1.9.1</span><span class="p">/</span><span class="nx">rubygems</span><span class="p">/</span><span class="nx">custom_require.rb</span><span class="p">:</span><span class="mi">36</span><span class="p">:</span><span class="k">in</span> <span class="sb">`require&#39;: cannot load such file -- mkmf (LoadError)</span>
+<span class="sb">    from /usr/lib/ruby/1.9.1/rubygems/custom_require.rb:36:in `</span><span class="k">require</span><span class="err">&#39;</span>
+    <span class="n">from</span> <span class="nx">extconf.rb</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="k">in</span> <span class="err">`</span><span class="o">&lt;</span><span class="nx">main</span><span class="o">&gt;</span><span class="s1">&#39;</span>
+
+
+<span class="s1">Gem files will remain installed in /var/lib/gems/1.9.1/gems/RedCloth-4.2.9 for inspection.</span>
+<span class="s1">Results logged to /var/lib/gems/1.9.1/gems/RedCloth-4.2.9/ext/redcloth_scan/gem_make.out</span>
+</pre></div>
+
+
+<p>悩んだ挙句ruby-dev入れたらなんとかなった。"*-dev"はよくハマる。</p>
+<div class="highlight"><pre>sudo apt-get install ruby-dev
+bundle install
+rake install
+</pre></div>
+
+
+<p>Githubを使う人はさらに</p>
+<div class="highlight"><pre>rake setup_github_pages
+</pre></div>
+
+
+<p>で自分のリポジトリのURLを設定して</p>
+<p>これで記事を書き始められます。ruby界はよくわからんので疲れた。</p>
+<h2>記事を書く</h2>
+<p>記事は</p>
+<div class="highlight"><pre>rake new_post[&quot;title&quot;]
+</pre></div>
+
+
+<p>で"title"がURLになるようです。
+あとは_posts/yyyy-mm-dd-title.markdownみたいなファイルができるので
+Markdown形式でゴリゴリ書いていけばおｋ。そして最後に</p>
+<div class="highlight"><pre>rake generate
+</pre></div>
+
+
+<p>をすればファイルが生成されます...がここでさらにハマってしまいました。
+ファイルが生成されてません。
+エラーを見てるどうやらnodeを要求してる模様。
+nodeってあのnodejsですよね
+でインストールしようとしたのですが、debianにはまだパッケージがない模様
+<a href="http://kotak.hatenablog.com/entry/2014/06/18/190500">こちら</a>
+によるとbackportsにはある模様なのでそこから取り込むことにして</p>
+<div class="highlight"><pre><span class="k">deb</span> <span class="s">http://ftp.jp.debian.org/debian/</span> <span class="kp">wheezy-backports</span> <span class="kp">main</span> <span class="kp">contrib</span> <span class="kp">non-free</span>
+<span class="k">deb-src</span> <span class="s">http://ftp.jp.debian.org/debian/</span> <span class="kp">wheezy-backports</span> <span class="kp">main</span> <span class="kp">contrib</span> <span class="kp">non-free</span>
+</pre></div>
+
+
+<div class="highlight"><pre>sudo apt-get update
+sudo apt-get install nodejs nodejs-legacy
+</pre></div>
+
+
+<p>で入りました。nodejs-legacyってのはnodeという名前がどっかで衝突しているのを回避するためのようです。nodeなんて超普通の名前をつけるから悪いんですよね全く。</p>
+<p>悪口はともかくちゃんとファイルもできたようなので
+記事ができたらアップする前に確認したいです。</p>
+<div class="highlight"><pre>rake preview
+</pre></div>
+
+
+<p>でローカルサーバを立てて確認できます。ポートはデフォルトで4000なので
+<a href="http://localhost:4000">http://localhost:4000</a>
+で見れます。</p>
+<p>と確認まではできたのですが、いまいちしっくり来ません。
+他にも静的サイトジェネレータはないかと探したのですが、
+ありました、それも我らがPythonで書かれたやつがね。
+ってことで次回はPelicanを紹介したいと思います。</p>
+<h3>参考ページ</h3>
+<ul>
+<li><a href="http://blog.glidenote.com/blog/2011/11/07/install-octopress-on-github/">GithubとOctopressでモダンな技術系ブログを作ってみる</a></li>
+</ul>
+            </div><!-- /.entry-content -->
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+  </ul>
+
+<h4>Categories</h4>
+<ul>
+		<li><a href="/category/misc.html">misc</a></li>
+		<li><a href="/category/tool.html">tool</a></li>
+</ul>
+
+
+<h4>Tags</h4>
+	<ul>
+	    <li class="tag-4"><a href="/tag/pelican.html">pelican</a></li>
+	    <li class="tag-4"><a href="/tag/python.html">python</a></li>
+	    <li class="tag-4"><a href="/tag/ruby.html">ruby</a></li>
+	    <li class="tag-4"><a href="/tag/octopress.html">octopress</a></li>
+	    <li class="tag-4"><a href="/tag/misc.html">misc</a></li>
+</ul>
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="/theme/js/libs/gumby.min.js"></script>
+  <script src="/theme/js/plugins.js"></script>
+</body>
+</html>
