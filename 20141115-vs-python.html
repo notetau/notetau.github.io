@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 
-        <title>はじめまして</title>
+        <title>Visual StudioでPythonが思ったより書ける件</title>
         <meta charset="utf-8" />
 
 
@@ -59,22 +59,45 @@
 
             <header>
               <h2 class="entry-title">
-                <a href="/20141102-firstpost.html" rel="bookmark"
-                   title="Permalink to はじめまして">はじめまして</a></h2>
+                <a href="/20141115-vs-python.html" rel="bookmark"
+                   title="Permalink to Visual StudioでPythonが思ったより書ける件">Visual StudioでPythonが思ったより書ける件</a></h2>
            
             </header>
             <footer class="post-info">
-              <abbr class="published" title="2014-11-02T00:00:00+01:00">
-                2014-11-02
+              <abbr class="published" title="2014-11-15T00:00:00+01:00">
+                2014-11-15
               </abbr>
               <address class="vcard author">By 
                 <a class="url fn" href="/author/notetau.html"> notetau</a>
               </address>
             </footer><!-- /.post-info -->
             <div class="entry-content">
-              <p>ブログをやりたい欲求が高まってきたのではじめました。
-c++とPythonが大好きなのでそれ系の記事が多くなるかとおもいますが、それ以外のことも積極的に勉強していきたいですねぇ。
-それではよろしくおねがいします。</p>
+              <p>先日<a href="http://www.microsoft.com/ja-jp/dev/products/community.aspx">Visaul Studio Community</a>が発表されましたね。
+個人であればProfessional相当の機能が使い放題とは太っ腹です（正確には個人以外でも使えますが）。
+私はVCのC++11の対応の遅さに呆れ、ここ数年VSは使わなかったのですが、MSはじまったなと思ったので久しぶりに触ってみました。しかし、C++11は相変わらずいまいちでした（テンプレートエイリアスはできるようになりましたが）。</p>
+<p>で本題ですが、プロジェクトのウィザードを見てたらなにやらPythonの文字が</p>
+<p><img alt="vs in python" src="./images/20141115/solution_dialog.png" /></p>
+<p>すでに知ってる人は当たり前のようですが、Visual StudioでPythonをがっつり書けるとは個人的にはびっくりしました。
+ちゃんとしたレベルで対応してます。以下スクショ。</p>
+<p>intellisenseはもちろん、</p>
+<p><img alt="intellisense1" src="./images/20141115/intellisense.png" /></p>
+<p>デコレータが来ても認識しますし、型も予測してくれます。
+下の図ではきちんとstr型のメソッドが出力されてますね。</p>
+<p><img alt="intellisense2" src="./images/20141115/intellisense2.png" /></p>
+<p>デバッグもブレークポイントを張ったり、変数をごにょごにょするのも自由自在。</p>
+<p><img alt="debug" src="./images/20141115/debug.png" /></p>
+<p>vertualenv＆pipもできる。</p>
+<p><img alt="vertualenv2" src="./images/20141115/venv2.png" />
+<img alt="vertualenv3" src="./images/20141115/venv3.png" /></p>
+<p>パッケージのインストール後は予測にもちゃんとでてきます。</p>
+<p><img alt="vertualenv4" src="./images/20141115/venv4.png" /></p>
+<hr />
+<h3>雑感</h3>
+<p>プロジェクトウィザードを見るに、DjangoだけではなくFlaskまで入ってるとはWebを意識しているようです。
+MS的にはPythonでWebアプリやWebサイトを作ってもらってAzureで動かしてもらおうという魂胆なんでしょうか。
+Azureって企業向けでべらぼうに高いものと思ってたのですが、
+無料のコースもあるそうなので、何かネタがあればAzureでPython製のWebアプリでも作ってみようかなと思いました。
+（.NETもオープンソース化されて盛り上がりそうだからC#で書くってもありかなぁ。）</p>
             </div><!-- /.entry-content -->
 
 
