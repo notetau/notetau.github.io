@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+        <title>Firefoxのアドオンを書いてみた</title>
+        <meta charset="utf-8" />
+
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="/theme/pygment.css" />
+
+        <script src="/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+              <script>
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+                ga('create', 'UA-56440000-1', 'auto');
+                ga('send', 'pageview');
+
+              </script>
+
+
+</head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="/">Memo In Notebook <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="/">Home</a></li>
+
+
+              </ul>
+            </div>
+
+<section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="/20141228-firefox_addon.html" rel="bookmark"
+                   title="Permalink to Firefoxのアドオンを書いてみた">Firefoxのアドオンを書いてみた</a></h2>
+           
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2014-12-28T00:00:00+01:00">
+                2014-12-28
+              </abbr>
+              <address class="vcard author">By 
+                <a class="url fn" href="/author/notetau.html"> notetau</a>
+              </address>
+            </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <p><a href="https://addons.mozilla.org/en-US/firefox/addon/word-later/">word-later</a>
+というアドオンを作りました(
+<a href="https://github.com/notetau/firefox-word-later">github</a>
+)。これは英語の文章を読む時に知らない単語が出たらポチポチ登録して、読み終えた後で単語帳につっこむために単語一覧を表示するアドオンです。探せば同じようなアドオンはあるかと思いますが勉強も兼ねて。</p>
+<p>昔もアドオンを作ろうとしたことがあるのですが、結構大変な作業でした。
+今はAdd-on SDKなるものが登場して、ある程度のことは簡単に作れるようになってます。<a href="https://developer.mozilla.org/ja/docs/Mozilla/Add-ons/SDK/%E3%83%81%E3%83%A5%E3%83%BC%E3%83%88%E3%83%AA%E3%82%A2%E3%83%AB">本家のチュートリアル</a>
+を参考に環境構築まではとても簡単にできました。</p>
+<p>以下、今回使ったAddonで使えるUIなどについてメモ</p>
+<h3>ActionButton</h3>
+<p>ツールバーのボタンです、Firefox 29以降のUIではツールバーのアイコンをメニューパネル（右上の横棒3つのやつで開くところ）に配置可能になりました。
+メニューパネルではボタンのアイコンは大きく表示されるので、iconプロパティは各サイズ用意したほうがいいと思います。</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">button</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;sdk/ui/button/action&quot;</span><span class="p">).</span><span class="nx">ActionButton</span><span class="p">({</span>
+    <span class="nx">id</span><span class="o">:</span> <span class="s2">&quot;word-later&quot;</span><span class="p">,</span>
+    <span class="nx">label</span><span class="o">:</span> <span class="s2">&quot;word later&quot;</span><span class="p">,</span>
+    <span class="nx">icon</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;16&quot;</span><span class="o">:</span> <span class="s2">&quot;./wordlater_icon16.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;32&quot;</span><span class="o">:</span> <span class="s2">&quot;./wordlater_icon32.png&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;64&quot;</span><span class="o">:</span> <span class="s2">&quot;./wordlater_icon64.png&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="nx">onClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">...</span>
+    <span class="p">},</span>
+<span class="p">});</span>
+</pre></div>
+
+
+<h3>context-menu</h3>
+<p>右クリックで出てくるコンテキストメニューです。
+今回のように何かを選択したときにメニューに項目を出したい場合はcontextプロパティにSelectionContext()を指定すればいいです。
+"〜を検索"のように、選択されたテキストをメニューに追加する場合</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">contextMenu</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;sdk/context-menu&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">menuItem</span> <span class="o">=</span> <span class="nx">contextMenu</span><span class="p">.</span><span class="nx">Item</span><span class="p">({</span>
+    <span class="nx">label</span><span class="o">:</span> <span class="s2">&quot;WORD LATER&quot;</span><span class="p">,</span>
+    <span class="nx">context</span><span class="o">:</span> <span class="nx">contextMenu</span><span class="p">.</span><span class="nx">SelectionContext</span><span class="p">(),</span>
+    <span class="nx">contentScript</span><span class="o">:</span>
+    <span class="s1">&#39;self.on(&quot;context&quot;, function () {&#39;</span> <span class="o">+</span>
+    <span class="s1">&#39;  var text = window.getSelection().toString();&#39;</span> <span class="o">+</span>　<span class="c1">//選択された文字列を取得</span>
+    <span class="s1">&#39;  if (text.length &gt; 20) text = text.substr(0, 20) + &quot;...&quot;;&#39;</span> <span class="o">+</span> <span class="c1">//あまりに長い文章が選択された場合は省略</span>
+    <span class="s1">&#39;  return &quot;Add word-later :&quot; + text;&#39;</span> <span class="o">+</span> <span class="c1">//メニューに表示するテキスト</span>
+    <span class="s1">&#39;});&#39;</span>
+    <span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+
+
+<p>のように書けばできます。contextScriptプロパティにはコードの文字列を与えないといけないのが注意点です。javascriptには複数行文字列が無いので汚い書き方になりますが仕方ないですね。</p>
+<h3>sidebar</h3>
+<p>サイドバーはそれ自体がひとつのHTMLのページになります。もちろん、その中でCSS,　javascriptも使用可能です。
+サイドバーとアドオンの通信には"addon"というグローバル変数を通しておこなうことができます。addon.port.emit()で相手側に送信しaddon.port.on()でハンドリングする流れです。</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">sidebar</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;sdk/ui/sidebar&quot;</span><span class="p">).</span><span class="nx">Sidebar</span><span class="p">({</span>
+    <span class="nx">id</span><span class="o">:</span> <span class="s2">&quot;word-later-list&quot;</span><span class="p">,</span>
+    <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;Word Later&quot;</span><span class="p">,</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;sdk/self&quot;</span><span class="p">).</span><span class="nx">data</span><span class="p">.</span><span class="nx">url</span><span class="p">(</span><span class="s2">&quot;sidebar.html&quot;</span><span class="p">),</span>
+
+    <span class="nx">onAttach</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">worker</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">...</span>
+    <span class="p">},</span>
+    <span class="nx">onDetach</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="p">...</span>
+    <span class="p">},</span>
+
+    <span class="nx">onReady</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">worker</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// &quot;worker&quot;がサイドバーの&quot;addon&quot;とつながる</span>
+        <span class="p">...</span>
+        <span class="nx">worker</span><span class="p">.</span><span class="nx">port</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//addon.port.emit(&quot;delete&quot;, item)が呼ばれたら</span>
+            <span class="p">...</span>
+        <span class="p">});</span>
+        <span class="p">...</span>
+    <span class="p">},</span>
+<span class="p">});</span>
+</pre></div>
+
+
+<p>としておけば、サイドバー側で</p>
+<div class="highlight"><pre><span class="nx">addon</span><span class="p">.</span><span class="nx">port</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="nx">item</span><span class="p">);</span>
+</pre></div>
+
+
+<p>を呼び出すことでアドオン側に処理をさせることができます。
+逆に、サイドバー側でaddon.port.on()で設定して、それをアドオン側から呼び出すこともできます。</p>
+<h3>simple-storage</h3>
+<p>データを保存することができます。
+データを保存するという点では似たようなものにsimple-prefsというモジュールがあります。
+各種設定などはsimple-prefs、ただのデータはsimple-storageと使い分けすればいいと思います。</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">simple_storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;sdk/simple-storage&quot;</span><span class="p">);</span>
+<span class="nx">simple_storage</span><span class="p">.</span><span class="nx">storage</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="c1">// simple_storage.foo = 1; // NG</span>
+<span class="p">...</span>
+</pre></div>
+
+
+<p>このようにrequire("sdk/simple-storage")で取ってきたオブジェクトのstorageプロパティに保存したいデータを自由に格納できます。
+storageプロパティに入れないとだめなので気をつけてください。
+データは配列、真偽値、数字、オブジェクト、null、文字列が格納できます。まあ、何でも入れられると思って問題なさそうです。</p>
+<h3>おわり</h3>
+<p>凝ったことをしない限りはとても簡単にアドオンを作ることができます。ドキュメントも英語ですが、きちんと揃ってるので頑張って読み進めていけばそれほど困ることは無いと思います。
+この後スマホ版のアドオンも作りたいなーと思ったのですが、使えるモジュールがかなり少なく、まだ仕様が固まってないような雰囲気なのでどうしようかなと思案中。</p>
+            </div><!-- /.entry-content -->
+            <div class="comments">
+              <h3>Comments</h3>
+              <div id="disqus_thread"></div>
+              <script type="text/javascript">
+                var disqus_identifier = "20141228-firefox_addon.html";
+                (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = 'http://memoinnotebook.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+              </script>
+            </div>
+
+
+        </div><!-- /.eleven.columns -->
+
+<div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+  </ul>
+
+<h4>Categories</h4>
+<ul>
+		<li><a href="/category/javascript.html">javascript</a></li>
+		<li><a href="/category/misc.html">misc</a></li>
+		<li><a href="/category/python.html">python</a></li>
+		<li><a href="/category/tool.html">tool</a></li>
+</ul>
+
+
+<h4>Tags</h4>
+	<ul>
+	    <li class="tag-4"><a href="/tag/misc.html">misc</a></li>
+	    <li class="tag-4"><a href="/tag/ruby.html">ruby</a></li>
+	    <li class="tag-4"><a href="/tag/firefox.html">firefox</a></li>
+	    <li class="tag-4"><a href="/tag/javascript.html">javascript</a></li>
+	    <li class="tag-1"><a href="/tag/python.html">python</a></li>
+	    <li class="tag-4"><a href="/tag/octopress.html">octopress</a></li>
+	    <li class="tag-4"><a href="/tag/visualstudio.html">visualstudio</a></li>
+	    <li class="tag-4"><a href="/tag/pelican.html">pelican</a></li>
+</ul>
+
+
+<nav class="widget">
+  <h4>Social</h4>
+  <ul>
+    <li><a href="https://twitter.com/nonotetau">Twitter</a></li>
+  </ul>
+</nav>
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+
+
+
+
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+<script type="text/javascript">
+    var disqus_shortname = 'memoinnotebook';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+  <script src="/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="/theme/js/libs/gumby.min.js"></script>
+  <script src="/theme/js/plugins.js"></script>
+</body>
+</html>
